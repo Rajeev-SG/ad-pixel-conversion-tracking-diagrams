@@ -395,6 +395,122 @@ Un-annotated capture of the same state.
 
 ---
 
+# Part 4 — Editorial set (`diagram-design` skill)
+
+A second, independent set built with the [diagram-design](https://github.com/cathrynlavery/diagram-design)
+skill (self-contained HTML + inline SVG, editorial design system). The existing
+Excalidraw and draw.io sets above are preserved unchanged; this set is additive.
+
+**Why a second set:** the first set used one layout habit (left-to-right box chains).
+This set picks a *diagram grammar per idea*, so each visual is shaped by what it
+has to explain rather than by a single default.
+
+## Type selection — one grammar per dominant axis
+
+| # | Diagram | Grammar chosen | Why this grammar |
+|---|---------|----------------|------------------|
+| `01-master-cross-functional-handoff` | Master view: who does what, end to end | Swimlane |
+| `02-campaign-anatomy` | Campaign anatomy: each level has one job | Tree |
+| `03-click-to-conversion-messages` | The click as messages between five actors | Sequence |
+| `04-click-journey-timeline` | Six seconds inside the click | Timeline |
+| `05-algorithm-learning-loop` | How the algorithm learns from every conversion | Loop |
+| `06-where-click-id-lives` | Where the click ID actually lives | Layer stack |
+| `07-tag-architecture` | Tag architecture: what runs where | Architecture |
+| `08-attribution-decision-flow` | How a conversion gets credited | Flowchart |
+
+Planned cuts (per the skill's deletion rule): one focused visual per idea instead of
+reproducing all 14 earlier diagrams. Every diagram stays within the skill's complexity
+budget (≤9 nodes, ≤12 connectors, ≤2 coral accents) and `doc-wide` 1280×720 so the set
+drops straight into a deck.
+
+## The diagrams
+
+### Master view: who does what, end to end
+
+**Swimlane** — cross-functional handoffs are the story, so the layout is horizontal lanes (Advertiser → Ad platform → Browser → Website → Measurement). Coral marks the two moments attribution depends on: the click ID and the credited conversion.
+
+![Master view: who does what, end to end](images/svg/editorial-01-master-cross-functional-handoff--diagramdesign.svg)
+
+**Files:** [`01-master-cross-functional-handoff--diagramdesign.html`](sources/diagram-design/editorial-01-master-cross-functional-handoff--diagramdesign.html) · [SVG](images/svg/editorial-01-master-cross-functional-handoff--diagramdesign.svg)
+
+### Campaign anatomy: each level has one job
+
+**Tree** — parent→children containment. One campaign owns objective and budget; ad sets own targeting and bids; ads own the creative and the click-through URL.
+
+![Campaign anatomy: each level has one job](images/svg/editorial-02-campaign-anatomy--diagramdesign.svg)
+
+**Files:** [`02-campaign-anatomy--diagramdesign.html`](sources/diagram-design/editorial-02-campaign-anatomy--diagramdesign.html) · [SVG](images/svg/editorial-02-campaign-anatomy--diagramdesign.svg)
+
+### The click as messages between five actors
+
+**Sequence** — time flows top→down and the story is who says what to whom: click, redirect+gclid, landing, cookie write, convert, event+click ID.
+
+![The click as messages between five actors](images/svg/editorial-03-click-to-conversion-messages--diagramdesign.svg)
+
+**Files:** [`03-click-to-conversion-messages--diagramdesign.html`](sources/diagram-design/editorial-03-click-to-conversion-messages--diagramdesign.html) · [SVG](images/svg/editorial-03-click-to-conversion-messages--diagramdesign.svg)
+
+### Six seconds inside the click
+
+**Timeline** — the dominant axis is elapsed time (T+0ms → T+days), so events sit on an honest time axis with alternating labels.
+
+![Six seconds inside the click](images/svg/editorial-04-click-journey-timeline--diagramdesign.svg)
+
+**Files:** [`04-click-journey-timeline--diagramdesign.html`](sources/diagram-design/editorial-04-click-journey-timeline--diagramdesign.html) · [SVG](images/svg/editorial-04-click-journey-timeline--diagramdesign.svg)
+
+### How the algorithm learns from every conversion
+
+**Loop** — a reinforcing cycle with a shared hub. Solid ring = work advances clockwise; dashed spokes = each pass writes back to the model state. This is the marquee diagram.
+
+![How the algorithm learns from every conversion](images/svg/editorial-05-algorithm-learning-loop--diagramdesign.svg)
+
+**Files:** [`05-algorithm-learning-loop--diagramdesign.html`](sources/diagram-design/editorial-05-algorithm-learning-loop--diagramdesign.html) · [SVG](images/svg/editorial-05-algorithm-learning-loop--diagramdesign.svg)
+
+### Where the click ID actually lives
+
+**Layer stack** — three stacked abstraction levels (URL parameter → first-party cookie → platform backend), because the point is hierarchy of durability, not sequence.
+
+![Where the click ID actually lives](images/svg/editorial-06-where-click-id-lives--diagramdesign.svg)
+
+**Files:** [`06-where-click-id-lives--diagramdesign.html`](sources/diagram-design/editorial-06-where-click-id-lives--diagramdesign.html) · [SVG](images/svg/editorial-06-where-click-id-lives--diagramdesign.svg)
+
+### Tag architecture: what runs where
+
+**Architecture** — components and connections, grouped by trust boundary (user browser → platform server).
+
+![Tag architecture: what runs where](images/svg/editorial-07-tag-architecture--diagramdesign.svg)
+
+**Files:** [`07-tag-architecture--diagramdesign.html`](sources/diagram-design/editorial-07-tag-architecture--diagramdesign.html) · [SVG](images/svg/editorial-07-tag-architecture--diagramdesign.svg)
+
+### How a conversion gets credited
+
+**Flowchart** — decision gates with branches. Coral is the single happy path; every other branch is a reason the number in Ads Manager is wrong.
+
+![How a conversion gets credited](images/svg/editorial-08-attribution-decision-flow--diagramdesign.svg)
+
+**Files:** [`08-attribution-decision-flow--diagramdesign.html`](sources/diagram-design/editorial-08-attribution-decision-flow--diagramdesign.html) · [SVG](images/svg/editorial-08-attribution-decision-flow--diagramdesign.svg)
+
+## Validation
+
+Each file was checked against the skill's own gates before being committed:
+
+- `skills/diagram-design/scripts/self_check.py` — **8/8 OK** (accessible-SVG contract:
+  `role="img"`, resolving `aria-labelledby`, first-child `<title>` + `<desc>`, prefixed IDs;
+  single-file safety: no remote assets beyond the Google Fonts stylesheet, no scripts)
+- `scripts/verify-geometry.py` — **8 files, 0 findings** (no arrow-label mask clipped by a
+  node painted after it — the exact defect class filed in [#1](https://github.com/Rajeev-SG/ad-pixel-conversion-tracking-diagrams/issues/1))
+- Rendered in headless Chrome and pixel-checked: no ink touches the canvas edge in any of
+  the 8, and every text node sits inside its `viewBox`
+- Connector rules enforced in the generator: orthogonal elbows with `r=8`, arrows drawn
+  before boxes, every arrow label on an opaque paper mask with a ≥6px gap, fan-out attach
+  points ≥12px apart, no diagonal connectors (except the Loop type's documented
+  circular-arc ring and radial spokes)
+
+To open one: double-click the `.html` — it is a single self-contained file (only Google
+Fonts is fetched over the network; it renders offline with fallback faces).
+
+
+---
+
 # Sources & citations
 
 Every mechanism above is grounded in official documentation — see [`docs/sources-and-citations.md`](docs/sources-and-citations.md).
